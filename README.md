@@ -1,4 +1,4 @@
-# copa-app
+# Copa App
 Aplicativo para Copa App
 
 baseado no layout proposto em:
