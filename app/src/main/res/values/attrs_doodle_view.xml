@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="DoodleView">
+        <attr name="dimension" format="dimension" />
+        <attr name="drawable" format="color|reference" />
+    </declare-styleable>
+</resources>

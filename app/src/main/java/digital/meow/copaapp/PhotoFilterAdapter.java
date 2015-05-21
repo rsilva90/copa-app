@@ -14,12 +14,15 @@ import butterknife.ButterKnife;
 public class PhotoFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
+    // qtde de efeitinhos
     private int itemsCount = 12;
 
     public PhotoFilterAdapter(Context context) {
         this.context = context;
     }
 
+
+    // aqui vai carregar os efeitinhos
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(context).inflate(R.layout.item_photo_filter, parent, false);
