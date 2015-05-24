@@ -1,14 +1,14 @@
 package digital.meow.copaapp;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,11 +25,14 @@ public class PhotoFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private ArrayList<Doodle> list;
     private int counter;
 
-    public PhotoFilterAdapter(Context context) {
+    RecyclerView recyclerView;
+
+    public PhotoFilterAdapter(Context context, RecyclerView v) {
         this.list = DoodleList.headDoodle;
         this.itemsCount = list.size();
         this.context = context;
         counter = 0;
+        this.recyclerView = v;
     }
 
 //    public PhotoFilterAdapter(Context context, ArrayList<String> list) {
@@ -39,13 +42,13 @@ public class PhotoFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //        this.context = context;
 //    }
 
-    public PhotoFilterAdapter(Context context, ArrayList<Doodle> list) {
+    public PhotoFilterAdapter(Context context, ArrayList<Doodle> list, RecyclerView v) {
         this.list = list;
         this.itemsCount = list.size();
         this.counter = 0;
         this.context = context;
+        this.recyclerView = v;
     }
-
 
     // aqui vai carregar os efeitinhos
     @Override
@@ -55,14 +58,20 @@ public class PhotoFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         Doodle d = list.get(counter);
         ImageView img = (ImageView)view.findViewById(R.id.ivDoodle);
         img.setImageResource(d.getResIcon());
-        view.setTag(d.getmDesc());
+        view.setTag(d.getResDoodle());
         counter++;
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String text = v.getTag().toString();
-                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                int res = Integer.parseInt(text);
+
+                ImageView iv = new ImageView(context);
+                iv.setImageResource(res);
+
+                recyclerView.addView(iv);
+                //Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
             }
         });
         return new PhotoFilterViewHolder(view);

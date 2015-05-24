@@ -55,6 +55,7 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
     ViewSwitcher vLowerPanel;
     CameraView cameraView;
     RecyclerView rvFilters;
+    RecyclerView rvDoodles;
     Button btnTakePhoto;
     ImageButton headDoodles;
     ImageButton faceDoodles;
@@ -80,6 +81,7 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
         vRevealBackground = (RevealBackgroundView)findViewById(R.id.vRevealBackground);
         btnTakePhoto = (Button)findViewById(R.id.btnTakePhoto);
         rvFilters = (RecyclerView)findViewById(R.id.rvFilters);
+        rvDoodles = (RecyclerView)findViewById(R.id.rvDoodles);
         cameraView = (CameraView)findViewById(R.id.cameraView);
         vLowerPanel = (ViewSwitcher)findViewById(R.id.vLowerPanel);
         vUpperPanel = (ViewSwitcher)findViewById(R.id.vUpperPanel);
@@ -138,14 +140,14 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
     }
 
     private void setupPhotoFilters() {
-        PhotoFilterAdapter photoFiltersAdapter = new PhotoFilterAdapter(this);
+        PhotoFilterAdapter photoFiltersAdapter = new PhotoFilterAdapter(this, rvDoodles);
         rvFilters.setHasFixedSize(true);
         rvFilters.setAdapter(photoFiltersAdapter);
         rvFilters.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     private void setupPhotoFilters(ArrayList<Doodle> list) {
-        PhotoFilterAdapter photoFiltersAdapter = new PhotoFilterAdapter(this, list);
+        PhotoFilterAdapter photoFiltersAdapter = new PhotoFilterAdapter(this, list, rvDoodles);
         rvFilters.setHasFixedSize(true);
         rvFilters.setAdapter(photoFiltersAdapter);
         rvFilters.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
