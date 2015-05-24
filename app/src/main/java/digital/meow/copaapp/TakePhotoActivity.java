@@ -23,7 +23,9 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.commonsware.cwac.camera.CameraHostProvider;
@@ -32,6 +34,7 @@ import com.commonsware.cwac.camera.PictureTransaction;
 import com.commonsware.cwac.camera.SimpleCameraHost;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
 public class TakePhotoActivity extends ActionBarActivity implements RevealBackgroundView.OnStateChangeListener,
@@ -53,6 +56,9 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
     CameraView cameraView;
     RecyclerView rvFilters;
     Button btnTakePhoto;
+    ImageButton headDoodles;
+    ImageButton faceDoodles;
+    ImageButton otherDoodles;
 
     private boolean pendingIntro;
     private int currentState;
@@ -80,8 +86,14 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
         ivTakenPhoto = (ImageView)findViewById(R.id.ivTakenPhoto);
         vShutter = (View)findViewById(R.id.vShutter);
         vTakePhotoRoot = (View)findViewById(R.id.vPhotoRoot);
+        headDoodles = (ImageButton)findViewById(R.id.headDoodles);
+        faceDoodles = (ImageButton)findViewById(R.id.faceDoodles);
+        otherDoodles = (ImageButton)findViewById(R.id.otherDoodles);
 
         btnTakePhoto.setOnClickListener(this);
+        headDoodles.setOnClickListener(this);
+        faceDoodles.setOnClickListener(this);
+        otherDoodles.setOnClickListener(this);
 
         updateStatusBarColor();
         updateState(STATE_TAKE_PHOTO);
@@ -132,6 +144,14 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
         rvFilters.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
+    private void setupPhotoFilters(ArrayList<Doodle> list) {
+        PhotoFilterAdapter photoFiltersAdapter = new PhotoFilterAdapter(this, list);
+        rvFilters.setHasFixedSize(true);
+        rvFilters.setAdapter(photoFiltersAdapter);
+        rvFilters.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -154,6 +174,21 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
                 break;
             case R.id.btnAccept:
                 //PublishActivity.openWithPhotoUri(this, Uri.fromFile(photoPath));
+                break;
+            case R.id.headDoodles:
+//                Toast.makeText(this, "Cabeça", Toast.LENGTH_SHORT).show();
+                setupPhotoFilters(DoodleList.headDoodle);
+                updateState(STATE_SETUP_PHOTO);
+                break;
+            case R.id.faceDoodles:
+//                Toast.makeText(this, "Rosto", Toast.LENGTH_SHORT).show();
+                setupPhotoFilters(DoodleList.faceDoodle);
+                updateState(STATE_SETUP_PHOTO);
+                break;
+            case R.id.otherDoodles:
+//                Toast.makeText(this, "Outros", Toast.LENGTH_SHORT).show();
+                setupPhotoFilters(DoodleList.otherDoodle);
+                updateState(STATE_SETUP_PHOTO);
                 break;
         }
     }

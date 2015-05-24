@@ -65,8 +65,7 @@
                     android:id="@+id/btnBack"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="@drawable/btn_default_light"
-                    android:src="@drawable/ic_arrow_back_white_24dp" />
+                    android:background="@drawable/btn_default_light" />
 
                 <View
                     android:layout_width="0dp"
@@ -74,12 +73,14 @@
                     android:layout_weight="1" />
 
                 <ImageButton
+                    android:id="@+id/headDoodles"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="@drawable/btn_default_light"
                     android:src="@drawable/ic_edit_white_24dp" />
 
                 <ImageButton
+                    android:id="@+id/faceDoodles"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginLeft="8dp"
@@ -88,6 +89,7 @@
                     android:src="@drawable/ic_edit_white_24dp" />
 
                 <ImageButton
+                    android:id="@+id/otherDoodles"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="@drawable/btn_default_light"
