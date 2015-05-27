@@ -1,5 +1,6 @@
 package digital.meow.copaapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -24,15 +26,14 @@ public class PhotoFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //    private ArrayList<String> list;
     private ArrayList<Doodle> list;
     private int counter;
+    private Activity activity;
 
-    RecyclerView recyclerView;
-
-    public PhotoFilterAdapter(Context context, RecyclerView v) {
+    public PhotoFilterAdapter(Context context, Activity activity) {
         this.list = DoodleList.headDoodle;
         this.itemsCount = list.size();
         this.context = context;
         counter = 0;
-        this.recyclerView = v;
+        this.activity=activity;
     }
 
 //    public PhotoFilterAdapter(Context context, ArrayList<String> list) {
@@ -42,12 +43,12 @@ public class PhotoFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //        this.context = context;
 //    }
 
-    public PhotoFilterAdapter(Context context, ArrayList<Doodle> list, RecyclerView v) {
+    public PhotoFilterAdapter(Context context, ArrayList<Doodle> list, Activity activity) {
         this.list = list;
         this.itemsCount = list.size();
         this.counter = 0;
         this.context = context;
-        this.recyclerView = v;
+        this.activity=activity;
     }
 
     // aqui vai carregar os efeitinhos
@@ -67,10 +68,13 @@ public class PhotoFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 String text = v.getTag().toString();
                 int res = Integer.parseInt(text);
 
+                FrameLayout fl = (FrameLayout) activity.findViewById(R.id.flDoodles);
+
                 ImageView iv = new ImageView(context);
                 iv.setImageResource(res);
 
-                recyclerView.addView(iv);
+                fl.addView(iv);
+
                 //Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
             }
         });

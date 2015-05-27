@@ -23,6 +23,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -55,7 +56,7 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
     ViewSwitcher vLowerPanel;
     CameraView cameraView;
     RecyclerView rvFilters;
-    RecyclerView rvDoodles;
+    FrameLayout flDoodles;
     Button btnTakePhoto;
     ImageButton headDoodles;
     ImageButton faceDoodles;
@@ -81,7 +82,7 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
         vRevealBackground = (RevealBackgroundView)findViewById(R.id.vRevealBackground);
         btnTakePhoto = (Button)findViewById(R.id.btnTakePhoto);
         rvFilters = (RecyclerView)findViewById(R.id.rvFilters);
-        rvDoodles = (RecyclerView)findViewById(R.id.rvDoodles);
+        flDoodles = (FrameLayout)findViewById(R.id.flDoodles);
         cameraView = (CameraView)findViewById(R.id.cameraView);
         vLowerPanel = (ViewSwitcher)findViewById(R.id.vLowerPanel);
         vUpperPanel = (ViewSwitcher)findViewById(R.id.vUpperPanel);
@@ -140,14 +141,14 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
     }
 
     private void setupPhotoFilters() {
-        PhotoFilterAdapter photoFiltersAdapter = new PhotoFilterAdapter(this, rvDoodles);
+        PhotoFilterAdapter photoFiltersAdapter = new PhotoFilterAdapter(this, this);
         rvFilters.setHasFixedSize(true);
         rvFilters.setAdapter(photoFiltersAdapter);
         rvFilters.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     private void setupPhotoFilters(ArrayList<Doodle> list) {
-        PhotoFilterAdapter photoFiltersAdapter = new PhotoFilterAdapter(this, list, rvDoodles);
+        PhotoFilterAdapter photoFiltersAdapter = new PhotoFilterAdapter(this, list, this);
         rvFilters.setHasFixedSize(true);
         rvFilters.setAdapter(photoFiltersAdapter);
         rvFilters.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -298,6 +299,7 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
             btnTakePhoto.setEnabled(true);
             vUpperPanel.showNext();
             vLowerPanel.showNext();
+            flDoodles.removeAllViews();
             updateState(STATE_TAKE_PHOTO);
         } else {
             super.onBackPressed();

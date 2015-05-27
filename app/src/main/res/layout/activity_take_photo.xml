@@ -129,11 +129,12 @@
                 android:scaleType="centerCrop"
                 android:visibility="gone" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvDoodles"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="none" />
+                android:id="@+id/flDoodles">
+
+            </FrameLayout>
 
             <View
                 android:id="@+id/vShutter"
