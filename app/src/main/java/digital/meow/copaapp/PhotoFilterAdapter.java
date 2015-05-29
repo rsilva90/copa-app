@@ -9,12 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by Romulo on 13/05/2015.
@@ -68,10 +72,11 @@ public class PhotoFilterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 String text = v.getTag().toString();
                 int res = Integer.parseInt(text);
 
-                FrameLayout fl = (FrameLayout) activity.findViewById(R.id.flDoodles);
+                AbsoluteLayout fl = (AbsoluteLayout) activity.findViewById(R.id.flDoodles);
 
-                ImageView iv = new ImageView(context);
-                iv.setImageResource(res);
+                TouchImageView iv = new TouchImageView(context);
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT,0,0));
+                iv.setImage(res);
 
                 fl.addView(iv);
 

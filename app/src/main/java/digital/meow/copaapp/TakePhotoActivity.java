@@ -22,10 +22,12 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.AbsoluteLayout;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -56,7 +58,7 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
     ViewSwitcher vLowerPanel;
     CameraView cameraView;
     RecyclerView rvFilters;
-    FrameLayout flDoodles;
+    AbsoluteLayout flDoodles;
     Button btnTakePhoto;
     ImageButton headDoodles;
     ImageButton faceDoodles;
@@ -82,7 +84,7 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
         vRevealBackground = (RevealBackgroundView)findViewById(R.id.vRevealBackground);
         btnTakePhoto = (Button)findViewById(R.id.btnTakePhoto);
         rvFilters = (RecyclerView)findViewById(R.id.rvFilters);
-        flDoodles = (FrameLayout)findViewById(R.id.flDoodles);
+        flDoodles = (AbsoluteLayout)findViewById(R.id.flDoodles);
         cameraView = (CameraView)findViewById(R.id.cameraView);
         vLowerPanel = (ViewSwitcher)findViewById(R.id.vLowerPanel);
         vUpperPanel = (ViewSwitcher)findViewById(R.id.vUpperPanel);
