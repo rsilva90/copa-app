@@ -10,12 +10,13 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 /**
  * Created by Romulo on 28/05/2015.
  */
-public class TouchImageView extends View implements  {
+public class TouchImageView extends View {
 
     private Drawable mIcon;
     private float mPosX;
@@ -32,28 +33,22 @@ public class TouchImageView extends View implements  {
 
     public TouchImageView(Context context) {
         this(context, null, 0);
-        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
     public TouchImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
     public TouchImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        mIcon = context.getResources().getDrawable(R.drawable.img_ico_biro);
-        mIcon.setBounds(0, 0, mIcon.getIntrinsicWidth(), mIcon.getIntrinsicHeight());
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
     public void setImage(int resourceId){
-        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mIcon = getContext().getResources().getDrawable(resourceId);
-        mIcon.setBounds(0, 0, mIcon.getMinimumWidth(), mIcon.getMinimumHeight());
+        mIcon.setBounds(0, 0, mIcon.getIntrinsicWidth(), mIcon.getIntrinsicHeight());
     }
 
     @Override
@@ -139,7 +134,6 @@ public class TouchImageView extends View implements  {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             mScaleFactor *= detector.getScaleFactor();
-
             // Don't let the object get too small or too large.
             mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
 

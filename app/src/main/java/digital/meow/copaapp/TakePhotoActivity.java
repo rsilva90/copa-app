@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
@@ -17,6 +18,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
@@ -35,8 +37,14 @@ import com.commonsware.cwac.camera.CameraHostProvider;
 import com.commonsware.cwac.camera.CameraView;
 import com.commonsware.cwac.camera.PictureTransaction;
 import com.commonsware.cwac.camera.SimpleCameraHost;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 
@@ -53,16 +61,19 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
     RevealBackgroundView vRevealBackground;
     View vTakePhotoRoot;
     View vShutter;
-    ImageView ivTakenPhoto;
+    SubsamplingScaleImageView ivTakenPhoto;
     ViewSwitcher vUpperPanel;
     ViewSwitcher vLowerPanel;
     CameraView cameraView;
     RecyclerView rvFilters;
+    AbsoluteLayout flBorders;
     AbsoluteLayout flDoodles;
     Button btnTakePhoto;
     ImageButton headDoodles;
     ImageButton faceDoodles;
+    ImageButton btnAccept;
     ImageButton otherDoodles;
+    SquaredFrameLayout square;
 
     private boolean pendingIntro;
     private int currentState;
@@ -85,20 +96,24 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
         btnTakePhoto = (Button)findViewById(R.id.btnTakePhoto);
         rvFilters = (RecyclerView)findViewById(R.id.rvFilters);
         flDoodles = (AbsoluteLayout)findViewById(R.id.flDoodles);
+        flBorders = (AbsoluteLayout)findViewById(R.id.flBorders);
         cameraView = (CameraView)findViewById(R.id.cameraView);
         vLowerPanel = (ViewSwitcher)findViewById(R.id.vLowerPanel);
         vUpperPanel = (ViewSwitcher)findViewById(R.id.vUpperPanel);
-        ivTakenPhoto = (ImageView)findViewById(R.id.ivTakenPhoto);
+        ivTakenPhoto = (SubsamplingScaleImageView)findViewById(R.id.ivTakenPhoto);
         vShutter = (View)findViewById(R.id.vShutter);
+        square = (SquaredFrameLayout)findViewById(R.id.vPhotoRoot);
         vTakePhotoRoot = (View)findViewById(R.id.vPhotoRoot);
         headDoodles = (ImageButton)findViewById(R.id.headDoodles);
         faceDoodles = (ImageButton)findViewById(R.id.faceDoodles);
         otherDoodles = (ImageButton)findViewById(R.id.otherDoodles);
+        btnAccept = (ImageButton)findViewById(R.id.btnAccept);
 
         btnTakePhoto.setOnClickListener(this);
         headDoodles.setOnClickListener(this);
         faceDoodles.setOnClickListener(this);
         otherDoodles.setOnClickListener(this);
+        btnAccept.setOnClickListener(this);
 
         updateStatusBarColor();
         updateState(STATE_TAKE_PHOTO);
@@ -178,7 +193,7 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
                 animateShutter();
                 break;
             case R.id.btnAccept:
-                //PublishActivity.openWithPhotoUri(this, Uri.fromFile(photoPath));
+                SaveFileToPublish();
                 break;
             case R.id.headDoodles:
 //                Toast.makeText(this, "Cabeça", Toast.LENGTH_SHORT).show();
@@ -196,6 +211,50 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
                 updateState(STATE_SETUP_PHOTO);
                 break;
         }
+    }
+
+    private void SaveFileToPublish(){
+        Bitmap bmp = screenShot(square);
+        File mFile = ImageHelper.getOutputMediaFile(ImageHelper.MEDIA_TYPE_IMAGE);
+        if (mFile == null){
+            Log.d("Copa APP", "Error creating media file, check storage permissions: ");
+            return;
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(mFile);
+
+            //b is the Bitmap
+            // calculate how many bytes our image consists of.
+            int bytes = bmp.getByteCount();
+            //or we can calculate bytes this way. Use a different value than 4 if you don't use 32bit images.
+            // int bytes = b.getWidth()*b.getHeight()*4;
+
+            ByteBuffer buffer = ByteBuffer.allocate(bytes); //Create a new buffer
+            bmp.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
+
+            byte[] array = buffer.array(); //Get the underlying array containing the data.
+
+            fos.write(array);
+            fos.close();
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(mFile)));
+        } catch (FileNotFoundException e) {
+            Log.d("Copa APP", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("Copa APP", "Error accessing file: " + e.getMessage());
+        }
+        Toast.makeText(this, "Cheque a galeria", Toast.LENGTH_SHORT).show();
+
+        //PublishActivity.openWithPhotoUri(this, Uri.fromFile(photoPath));
+    }
+
+    public Bitmap screenShot(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
+                view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        //view.draw(canvas);
+        ivTakenPhoto.draw(canvas);
+        return bitmap;
     }
 
     private void animateShutter() {
@@ -291,7 +350,7 @@ public class TakePhotoActivity extends ActionBarActivity implements RevealBackgr
     private void showTakenPicture(Bitmap bitmap) {
         vUpperPanel.showNext();
         vLowerPanel.showNext();
-        ivTakenPhoto.setImageBitmap(bitmap);
+        ivTakenPhoto.setImage(ImageSource.bitmap(bitmap));// setImageBitmap(bitmap);
         updateState(STATE_SETUP_PHOTO);
     }
 

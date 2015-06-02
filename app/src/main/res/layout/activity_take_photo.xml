@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -121,19 +122,32 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical" />
 
-            <ImageButton
+            <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
                 android:id="@+id/ivTakenPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/transparent"
+                android:background="@android:color/black"
+                app:quickScaleEnabled="true"
                 android:scaleType="centerCrop"
-                android:visibility="gone" />
+                android:visibility="gone"
+                />
+            <!--<ImageButton-->
+                <!--android:id="@+id/ivTakenPhoto"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:visibility="gone" />-->
 
             <AbsoluteLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/flDoodles">
-            </AbsoluteLayout>
+                android:id="@+id/flDoodles" />
+
+            <AbsoluteLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/flBorders" />
 
             <View
                 android:id="@+id/vShutter"

@@ -34,6 +34,8 @@ public class ImageHelper {
         return mFile;
     }
 
+
+
     public static Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
 
         @Override
@@ -76,11 +78,11 @@ public class ImageHelper {
         return false;
     }
 
-    private static Uri getOutputMediaFileUri(int type, String folderName){
+    public static Uri getOutputMediaFileUri(int type, String folderName){
         return Uri.fromFile(getOutputMediaFile(type));
     }
 
-    private static File getOutputMediaFile(int type){
+    public static File getOutputMediaFile(int type){
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "Copa APP");
 
